@@ -1,18 +1,10 @@
-/* ============================================================
-   WIQAYA — Main Application JavaScript
-   ============================================================ */
+var currentLanguage = "fr";
+var currentScanType = "cin";
+var currentScreen = "landing";
+var lastScanResult = null;
+var phishingScore = { correct: 0, total: 0 };
 
-let currentLanguage = "fr";
-let currentScanType = "cin";
-let currentScreen = "landing";
-let lastScanResult = null;
-let phishingScore = { correct: 0, total: 0 };
-
-// ============================================================
-// Translations
-// ============================================================
-
-const T = {
+var T = {
     fr: {
         scanPlaceholderCin: "Entrez votre numero CIN (ex: AB123456)",
         scanPlaceholderEmail: "Entrez votre adresse email",
@@ -89,10 +81,6 @@ function t(key) {
     return T[currentLanguage]?.[key] || T["fr"][key] || key;
 }
 
-// ============================================================
-// Navigation
-// ============================================================
-
 function showScreen(screen) {
     currentScreen = screen;
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
@@ -117,10 +105,6 @@ function showScreen(screen) {
     }
 }
 
-// ============================================================
-// Language
-// ============================================================
-
 function setLanguage(lang) {
     currentLanguage = lang;
     document.documentElement.lang = lang === "ar" ? "ar" : "fr";
@@ -139,10 +123,6 @@ function setLanguage(lang) {
         scanInput.placeholder = currentScanType === "cin" ? t("scanPlaceholderCin") : t("scanPlaceholderEmail");
     }
 }
-
-// ============================================================
-// Scanner (Module 1)
-// ============================================================
 
 function setScanType(type) {
     currentScanType = type;
@@ -229,7 +209,6 @@ function renderScanResults(data, container) {
 
     var html = '';
 
-    // Risk header
     html += '<div class="risk-header ' + levelClass + '">' +
         '<div class="risk-circle" style="border-color:' + risk.color + ';color:' + risk.color + '">' +
         '<div class="risk-num">' + data.risk_score + '</div>' +
@@ -237,7 +216,6 @@ function renderScanResults(data, container) {
         '<div class="risk-level" style="color:' + risk.color + '">' + riskLabel + '</div>' +
         '<div class="risk-count">' + data.total_breaches + ' ' + t("breachesFound") + '</div></div>';
 
-    // Exposed categories
     html += '<div class="exposed-card"><h3><i class="ti ti-alert-triangle"></i> ' + t("exposedData") + '</h3>' +
         '<div class="exposed-grid">';
     data.category_details.forEach(function(cat) {
@@ -249,7 +227,6 @@ function renderScanResults(data, container) {
     });
     html += '</div></div>';
 
-    // Breach sources
     html += '<div class="exposed-card"><h3><i class="ti ti-database"></i> ' + t("breachSources") + '</h3>';
     data.breaches.forEach(function(breach) {
         var srcClass = breach.source === "CNSS" ? "cnss" : "ofppt";
@@ -263,7 +240,6 @@ function renderScanResults(data, container) {
     });
     html += '</div>';
 
-    // Actions
     html += '<div class="scan-actions">' +
         '<button class="btn-primary" onclick="showScreen(\'plan\')">' +
         '<i class="ti ti-shield-check"></i> ' + t("generatePlan") + '</button>' +
@@ -282,10 +258,6 @@ function renderNotFound(data, container) {
         '<p>' + (data[titleKey] || t("notFoundText")) + '</p>' +
         '<div class="nf-note">' + (data[noteKey] || t("notFoundNote")) + '</div></div>';
 }
-
-// ============================================================
-// Protection Plan (Module 2)
-// ============================================================
 
 async function generateProtectionPlan() {
     var container = document.getElementById("planContent");
@@ -316,12 +288,10 @@ async function generateProtectionPlan() {
 function renderProtectionPlan(plan, container) {
     var html = '<div class="plan-wrap">';
 
-    // Header
     html += '<div class="plan-header">' +
         '<h3><i class="ti ti-shield-check"></i> Plan de protection</h3>' +
         '<p>' + (plan.summary || "") + '</p></div>';
 
-    // Steps
     html += '<div class="plan-steps">';
     if (plan.steps && Array.isArray(plan.steps)) {
         plan.steps.forEach(function(step, i) {
@@ -338,19 +308,17 @@ function renderProtectionPlan(plan, container) {
     }
     html += '</div>';
 
-    // Resources
     if (plan.resources && Array.isArray(plan.resources) && plan.resources.length > 0) {
         html += '<div class="plan-resources"><h3>' + t("resources") + '</h3>';
         plan.resources.forEach(function(r) {
             html += '<a href="' + (r.url || '#') + '" class="res-link" target="_blank" rel="noopener">' +
                 '<i class="ti ti-external-link"></i> ' +
                 '<strong>' + (r.name || "") + '</strong>' +
-                (r.description ? ' — ' + r.description : '') + '</a>';
+                (r.description ? ' -- ' + r.description : '') + '</a>';
         });
         html += '</div>';
     }
 
-    // Legal
     if (plan.legal_rights) {
         html += '<div class="plan-legal"><i class="ti ti-gavel"></i>' +
             '<strong>' + t("yourRights") + ':</strong> ' + plan.legal_rights + '</div>';
@@ -359,10 +327,6 @@ function renderProtectionPlan(plan, container) {
     html += '</div>';
     container.innerHTML = html;
 }
-
-// ============================================================
-// Phishing Simulator (Module 3)
-// ============================================================
 
 async function generatePhishingScenarios() {
     var container = document.getElementById("phishingContent");
@@ -415,7 +379,6 @@ function renderPhishingScenarios(data, container) {
         if (scenario.subject) html += '<div class="msg-subj">' + scenario.subject + '</div>';
         html += (scenario.content || "") + '</div>';
 
-        // Quiz
         html += '<div class="quiz-bar" id="quiz-' + idx + '">' +
             '<span class="quiz-q">' + t("isThisScam") + '</span>' +
             '<div class="quiz-btns">' +
@@ -423,7 +386,6 @@ function renderPhishingScenarios(data, container) {
             '<button class="qbtn qbtn-legit" onclick="answerQuiz(' + idx + ',false)">' + t("btnLegit") + '</button>' +
             '</div></div>';
 
-        // Flags (hidden)
         html += '<div class="sc-flags" id="flags-' + idx + '" style="display:none">' +
             '<h4><i class="ti ti-alert-triangle"></i> ' + t("redFlags") + '</h4>';
         (scenario.red_flags || []).forEach(function(flag, fi) {
@@ -445,7 +407,6 @@ function renderPhishingScenarios(data, container) {
         html += '</div>';
     });
 
-    // Tips
     if (tips.length > 0) {
         html += '<div class="gen-tips"><h3><i class="ti ti-bulb"></i> ' + t("generalTips") + '</h3>';
         tips.forEach(function(tip) {
@@ -485,10 +446,6 @@ function answerQuiz(idx, saidScam) {
     }
 }
 
-// ============================================================
-// Stats
-// ============================================================
-
 async function loadStats() {
     try {
         var res = await fetch("/api/stats");
@@ -514,10 +471,6 @@ function animateNumber(el, target) {
     requestAnimationFrame(update);
 }
 
-// ============================================================
-// Utilities
-// ============================================================
-
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -528,10 +481,6 @@ function renderError(message) {
         '<h3>' + t("errorTitle") + '</h3>' +
         '<p>' + message + '</p></div>';
 }
-
-// ============================================================
-// Init
-// ============================================================
 
 document.addEventListener("DOMContentLoaded", function() {
     loadStats();
