@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIQAYA وقاية — AI-Powered Post-Breach Identity Shield</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Kufi+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- Ambient background orbs -->
+<div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- NAVIGATION -->
+<!-- ============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <div class="nav-brand" onclick="showScreen('landing')">
+            <div class="brand-shield">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2l7 4v6c0 5.25-3.5 9.74-7 11-3.5-1.26-7-5.75-7-11V6l7-4z"/>
+                    <path d="M9 12l2 2 4-4" stroke-width="2.5"/>
+                </svg>
+            </div>
+            <span class="brand-name">WIQAYA</span>
+            <span class="brand-ar">وقاية</span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#" class="nav-link active" data-screen="landing" onclick="showScreen('landing')">
+                <i class="ti ti-home"></i><span>Accueil</span>
+            </a>
+            <a href="#" class="nav-link" data-screen="scanner" onclick="showScreen('scanner')">
+                <i class="ti ti-radar-2"></i><span>Scanner</span>
+            </a>
+            <a href="#" class="nav-link" data-screen="plan" onclick="showScreen('plan')">
+                <i class="ti ti-shield-check"></i><span>Protection</span>
+            </a>
+            <a href="#" class="nav-link" data-screen="phishing" onclick="showScreen('phishing')">
+                <i class="ti ti-fish-hook"></i><span>Simulateur</span>
+            </a>
+        </div>
+
+        <div class="nav-lang">
+            <button class="lang-btn active" onclick="setLanguage('fr')">FR</button>
+            <button class="lang-btn" onclick="setLanguage('ar')">عربي</button>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- SCREEN: LANDING -->
+<!-- ============================================================ -->
+<section class="screen active" id="screen-landing">
+    <div class="hero">
+        <div class="hero-grid-bg"></div>
+        <div class="hero-radial"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge anim-up" style="--d:.1s">
+                <span class="pulse-dot"></span>
+                Youth Nexus Cyber AI Challenge — 1ère Édition
+            </div>
+
+            <h1 class="hero-title anim-up" style="--d:.2s">
+                <span class="title-large">WIQAYA</span>
+                <span class="title-arabic">وقاية</span>
+            </h1>
+
+            <p class="hero-tagline anim-up" style="--d:.3s">
+                Bouclier d'Identité Post-Fuite<br>Alimenté par l'Intelligence Artificielle
+            </p>
+
+            <p class="hero-desc anim-up" style="--d:.4s">
+                Suite aux cyberattaques contre la <strong>CNSS</strong> et l'<strong>OFPPT</strong>,
+                des millions de citoyens marocains sont exposés. WIQAYA vous aide à vérifier, comprendre et vous protéger.
+            </p>
+
+            <div class="hero-stats anim-up" style="--d:.5s">
+                <div class="hstat">
+                    <span class="hstat-val" id="statTotal">0</span>
+                    <span class="hstat-lbl">Enregistrements</span>
+                </div>
+                <div class="hstat-sep"></div>
+                <div class="hstat">
+                    <span class="hstat-val" id="statCritical">0</span>
+                    <span class="hstat-lbl">Cas critiques</span>
+                </div>
+                <div class="hstat-sep"></div>
+                <div class="hstat">
+                    <span class="hstat-val">2</span>
+                    <span class="hstat-lbl">Fuites couvertes</span>
+                </div>
+            </div>
+
+            <div class="hero-cta anim-up" style="--d:.6s">
+                <button class="btn-hero" onclick="showScreen('scanner')">
+                    <span class="btn-hero-glow"></span>
+                    <i class="ti ti-radar-2"></i>
+                    Vérifier mon exposition
+                    <i class="ti ti-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating alert cards -->
+        <div class="float-card fc-1">
+            <div class="fc-icon fc-red"><i class="ti ti-alert-triangle"></i></div>
+            <div class="fc-text">
+                <strong>CNSS Breach</strong>
+                <span>~2M citoyens exposés</span>
+            </div>
+        </div>
+        <div class="float-card fc-2">
+            <div class="fc-icon fc-orange"><i class="ti ti-database-off"></i></div>
+            <div class="fc-text">
+                <strong>OFPPT Breach</strong>
+                <span>400K+ étudiants</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modules -->
+    <div class="modules-wrap">
+        <div class="sec-header">
+            <span class="sec-eyebrow">Comment ça marche</span>
+            <h2>Trois modules de protection</h2>
+        </div>
+        <div class="modules-grid">
+            <div class="mod-card" onclick="showScreen('scanner')">
+                <span class="mod-num">01</span>
+                <div class="mod-icon mi-scan"><i class="ti ti-radar-2"></i></div>
+                <h3>Scanner d'Exposition</h3>
+                <p>Vérifiez si votre CIN ou email figure dans les fuites CNSS/OFPPT. Score de risque instantané avec détail des données exposées.</p>
+                <span class="mod-arrow"><i class="ti ti-arrow-right"></i></span>
+            </div>
+            <div class="mod-card" onclick="showScreen('plan')">
+                <span class="mod-num">02</span>
+                <div class="mod-icon mi-plan"><i class="ti ti-shield-check"></i></div>
+                <h3>Plan de Protection IA</h3>
+                <p>Plan d'action personnalisé généré par GPT-4o, aligné sur les lois marocaines 09-08 et 05-20.</p>
+                <span class="mod-arrow"><i class="ti ti-arrow-right"></i></span>
+            </div>
+            <div class="mod-card" onclick="showScreen('phishing')">
+                <span class="mod-num">03</span>
+                <div class="mod-icon mi-phish"><i class="ti ti-fish-hook"></i></div>
+                <h3>Simulateur de Phishing</h3>
+                <p>Exercices interactifs avec scénarios d'arnaque réalistes ciblant vos données exposées.</p>
+                <span class="mod-arrow"><i class="ti ti-arrow-right"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info bar -->
+    <div class="info-bar">
+        <div class="info-item">
+            <i class="ti ti-gavel"></i>
+            <div><strong>Cadre juridique</strong><span>Loi 09-08 · Loi 05-20 · CNDP · DGSSI</span></div>
+        </div>
+        <div class="info-item">
+            <i class="ti ti-brain"></i>
+            <div><strong>Alimenté par l'IA</strong><span>OpenAI GPT-4o en temps réel</span></div>
+        </div>
+        <div class="info-item">
+            <i class="ti ti-lock"></i>
+            <div><strong>100% synthétique</strong><span>Aucune donnée réelle utilisée</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN: SCANNER -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-scanner">
+    <div class="screen-inner">
+        <div class="screen-head">
+            <div class="mbadge mb-scan"><span>01</span> Scanner d'Exposition</div>
+            <h1><i class="ti ti-radar-2"></i> Vérifiez votre exposition</h1>
+            <p>Recherchez votre CIN ou email dans notre base de données des fuites CNSS et OFPPT.</p>
+        </div>
+
+        <div class="scan-card glass-card">
+            <div class="scan-tabs">
+                <button class="stab active" onclick="setScanType('cin')" id="tabCin">
+                    <i class="ti ti-id"></i> Numéro CIN
+                </button>
+                <button class="stab" onclick="setScanType('email')" id="tabEmail">
+                    <i class="ti ti-mail"></i> Adresse Email
+                </button>
+            </div>
+            <div class="scan-row">
+                <div class="scan-field">
+                    <i class="ti ti-search sf-icon"></i>
+                    <input type="text" id="scanInput" placeholder="Entrez votre numéro CIN (ex: AB123456)" autocomplete="off" spellcheck="false">
+                </div>
+                <button class="btn-primary btn-analyze" onclick="performScan()" id="scanBtn">
+                    Analyser <i class="ti ti-arrow-right"></i>
+                </button>
+            </div>
+            <div class="scan-foot">
+                <button class="btn-demo" onclick="loadDemoCIN()">
+                    <i class="ti ti-flask"></i> Charger un CIN de démo
+                </button>
+                <span class="scan-note"><i class="ti ti-info-circle"></i> Données synthétiques</span>
+            </div>
+        </div>
+
+        <div id="scanResults" class="scan-results hidden"></div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN: PLAN -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-plan">
+    <div class="screen-inner">
+        <div class="screen-head">
+            <div class="mbadge mb-plan"><span>02</span> Plan de Protection IA</div>
+            <h1><i class="ti ti-shield-check"></i> Votre plan personnalisé</h1>
+            <p>L'IA génère un plan d'action adapté à votre profil, basé sur le cadre juridique marocain.</p>
+        </div>
+        <div id="planContent">
+            <div class="empty-state glass-card">
+                <div class="empty-ic"><i class="ti ti-shield-off"></i></div>
+                <h3>Aucun profil de risque</h3>
+                <p>Effectuez d'abord un scan pour obtenir votre profil de risque.</p>
+                <button class="btn-primary" onclick="showScreen('scanner')">
+                    <i class="ti ti-radar-2"></i> Aller au Scanner
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN: PHISHING -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-phishing">
+    <div class="screen-inner">
+        <div class="screen-head">
+            <div class="mbadge mb-phish"><span>03</span> Simulateur de Phishing</div>
+            <h1><i class="ti ti-fish-hook"></i> Détectez les arnaques</h1>
+            <p>Scénarios de phishing réalistes basés sur vos données exposées. Testez vos réflexes!</p>
+        </div>
+        <div id="phishingContent">
+            <div class="empty-state glass-card">
+                <div class="empty-ic"><i class="ti ti-fish-hook"></i></div>
+                <h3>Aucun profil de risque</h3>
+                <p>Effectuez d'abord un scan pour obtenir votre profil de risque.</p>
+                <button class="btn-primary" onclick="showScreen('scanner')">
+                    <i class="ti ti-radar-2"></i> Aller au Scanner
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5.25-3.5 9.74-7 11-3.5-1.26-7-5.75-7-11V6l7-4z"/></svg>
+            WIQAYA وقاية
+        </div>
+        <span class="footer-sep">·</span>
+        <span>Youth Nexus Cyber AI Challenge — ENSA Kénitra × CMRPI — Mai 2026</span>
+    </div>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
