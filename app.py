@@ -1,13 +1,3 @@
-"""
-WIQAYA وقاية — AI-Powered Post-Breach Identity Shield
-Main Flask Application
-
-Modules:
-1. Breach Exposure Scanner - Check if your data was compromised
-2. AI Protection Plan Generator - Personalized remediation steps
-3. Phishing & Scam Simulator - Learn to spot attacks targeting you
-"""
-
 import os
 import json
 import sqlite3
@@ -20,21 +10,12 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "wiqaya.db")
 
-# ============================================================
-# OpenAI Configuration
-# ============================================================
-
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 def get_openai_client():
-    """Get OpenAI client - lazy import."""
     from openai import OpenAI
     return OpenAI(api_key=OPENAI_API_KEY)
 
-
-# ============================================================
-# Database helpers
-# ============================================================
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -46,31 +27,27 @@ def hash_identifier(value):
     return hashlib.sha256(value.encode()).hexdigest()[:16]
 
 
-# ============================================================
-# Risk Classification Engine
-# ============================================================
-
 RISK_LEVELS = {
     "CRITICAL": {"min": 75, "color": "#E24B4A", "label_fr": "Critique", "label_ar": "حرج"},
-    "HIGH":     {"min": 50, "color": "#EF9F27", "label_fr": "Élevé",   "label_ar": "مرتفع"},
+    "HIGH":     {"min": 50, "color": "#EF9F27", "label_fr": "Eleve",   "label_ar": "مرتفع"},
     "MEDIUM":   {"min": 30, "color": "#639922", "label_fr": "Moyen",   "label_ar": "متوسط"},
     "LOW":      {"min": 0,  "color": "#1D9E75", "label_fr": "Faible",  "label_ar": "منخفض"},
 }
 
 CATEGORY_LABELS = {
-    "cin":             {"fr": "Numéro CIN",           "ar": "رقم البطاقة الوطنية", "icon": "id-card", "severity": "high"},
+    "cin":             {"fr": "Numero CIN",           "ar": "رقم البطاقة الوطنية", "icon": "id-card", "severity": "high"},
     "full_name":       {"fr": "Nom complet",          "ar": "الاسم الكامل",       "icon": "user",    "severity": "medium"},
     "email":           {"fr": "Adresse email",        "ar": "البريد الإلكتروني",   "icon": "mail",    "severity": "medium"},
-    "phone":           {"fr": "Numéro de téléphone",  "ar": "رقم الهاتف",         "icon": "phone",   "severity": "medium"},
+    "phone":           {"fr": "Numero de telephone",  "ar": "رقم الهاتف",         "icon": "phone",   "severity": "medium"},
     "employer":        {"fr": "Employeur",            "ar": "جهة العمل",          "icon": "building", "severity": "low"},
     "salary":          {"fr": "Informations salariales","ar": "معلومات الراتب",    "icon": "currency-dollar", "severity": "high"},
     "bank_account":    {"fr": "Compte bancaire (RIB)","ar": "الحساب البنكي",      "icon": "credit-card", "severity": "critical"},
     "bank_name":       {"fr": "Nom de la banque",     "ar": "اسم البنك",          "icon": "building", "severity": "medium"},
     "birth_date":      {"fr": "Date de naissance",    "ar": "تاريخ الازدياد",      "icon": "calendar", "severity": "medium"},
-    "filiere":         {"fr": "Filière de formation",  "ar": "شعبة التكوين",       "icon": "school",  "severity": "low"},
+    "filiere":         {"fr": "Filiere de formation",  "ar": "شعبة التكوين",       "icon": "school",  "severity": "low"},
     "center":          {"fr": "Centre de formation",   "ar": "مركز التكوين",       "icon": "map-pin", "severity": "low"},
-    "diploma_level":   {"fr": "Niveau de diplôme",     "ar": "مستوى الشهادة",      "icon": "certificate", "severity": "low"},
-    "enrollment_year": {"fr": "Année d'inscription",   "ar": "سنة التسجيل",        "icon": "calendar", "severity": "low"},
+    "diploma_level":   {"fr": "Niveau de diplome",     "ar": "مستوى الشهادة",      "icon": "certificate", "severity": "low"},
+    "enrollment_year": {"fr": "Annee d'inscription",   "ar": "سنة التسجيل",        "icon": "calendar", "severity": "low"},
 }
 
 
@@ -82,7 +59,6 @@ def classify_risk(score):
 
 
 def build_exposure_report(records):
-    """Build a structured exposure report from breach records."""
     breaches = []
     all_categories = set()
     max_risk = 0
@@ -103,9 +79,8 @@ def build_exposure_report(records):
             "city": record["city"],
         }
 
-        # Add source-specific context
         if record["breach_source"] == "CNSS":
-            breach_info["context_fr"] = "Fuite de la Caisse Nationale de Sécurité Sociale (avril 2025)"
+            breach_info["context_fr"] = "Fuite de la Caisse Nationale de Securite Sociale (avril 2025)"
             breach_info["context_ar"] = "تسريب الصندوق الوطني للضمان الاجتماعي (أبريل 2025)"
             if record["employer"]:
                 breach_info["employer"] = record["employer"]
@@ -133,44 +108,40 @@ def build_exposure_report(records):
     }
 
 
-# ============================================================
-# AI System Prompts
-# ============================================================
-
-PROTECTION_PLAN_SYSTEM_PROMPT = """Tu es WIQAYA, un assistant expert en cybersécurité et protection des données personnelles au Maroc. Tu génères des plans de protection personnalisés pour les citoyens marocains dont les données ont été exposées lors des cyberattaques contre la CNSS et l'OFPPT.
+PROTECTION_PLAN_SYSTEM_PROMPT = """Tu es WIQAYA, un assistant expert en cybersecurite et protection des donnees personnelles au Maroc. Tu generes des plans de protection personnalises pour les citoyens marocains dont les donnees ont ete exposees lors des cyberattaques contre la CNSS et l'OFPPT.
 
 CONTEXTE JURIDIQUE MAROCAIN:
-- Loi 09-08 relative à la protection des personnes physiques à l'égard du traitement des données à caractère personnel
-- Loi 05-20 relative à la cybersécurité (promulguée en 2020)
-- La CNDP (Commission Nationale de contrôle de la protection des Données à caractère Personnel) est l'autorité de régulation
-- La DGSSI (Direction Générale de la Sécurité des Systèmes d'Information) est l'autorité nationale de cybersécurité
-- Le maCERT est le centre de veille, détection et réponse aux attaques informatiques
+- Loi 09-08 relative a la protection des personnes physiques a l'egard du traitement des donnees a caractere personnel
+- Loi 05-20 relative a la cybersecurite (promulguee en 2020)
+- La CNDP (Commission Nationale de controle de la protection des Donnees a caractere Personnel) est l'autorite de regulation
+- La DGSSI (Direction Generale de la Securite des Systemes d'Information) est l'autorite nationale de cybersecurite
+- Le maCERT est le centre de veille, detection et reponse aux attaques informatiques
 
-PROCÉDURES CONCRÈTES AU MAROC:
+PROCEDURES CONCRETES AU MAROC:
 - Plainte CNDP: formulaire en ligne sur www.cndp.ma ou par courrier au 15, Avenue Annakhil, Hay Riad, Rabat
 - Signalement DGSSI: via le portail www.dgssi.gov.ma
-- Dépôt de plainte police: Brigade Nationale de la Police Judiciaire (BNPJ) - section cybercriminalité
-- Banques marocaines: procédure d'opposition carte et changement de RIB disponible en agence
+- Depot de plainte police: Brigade Nationale de la Police Judiciaire (BNPJ) - section cybercriminalite
+- Banques marocaines: procedure d'opposition carte et changement de RIB disponible en agence
 
 INSTRUCTIONS:
-1. Analyse le profil de risque fourni (catégories de données exposées, source de la fuite, score de risque)
-2. Génère un plan de protection en 5-8 étapes concrètes, priorisées par urgence
-3. Chaque étape doit inclure: l'action précise, pourquoi c'est important, comment le faire au Maroc
+1. Analyse le profil de risque fourni (categories de donnees exposees, source de la fuite, score de risque)
+2. Genere un plan de protection en 5-8 etapes concretes, priorisees par urgence
+3. Chaque etape doit inclure: l'action precise, pourquoi c'est important, comment le faire au Maroc
 4. Utilise un langage clair et accessible, pas de jargon technique excessif
-5. Adapte les recommandations aux données spécifiquement exposées
-6. IMPORTANT: Réponds en français par défaut. Si le contexte indique l'arabe, réponds en arabe.
+5. Adapte les recommandations aux donnees specifiquement exposees
+6. IMPORTANT: Reponds en francais par defaut. Si le contexte indique l'arabe, reponds en arabe.
 
-FORMAT DE RÉPONSE: JSON avec la structure suivante:
+FORMAT DE REPONSE: JSON avec la structure suivante:
 {
-  "summary": "Résumé de la situation en 2-3 phrases",
+  "summary": "Resume de la situation en 2-3 phrases",
   "urgency": "immediate|high|medium|low",
   "steps": [
     {
       "priority": 1,
       "title": "Titre de l'action",
-      "description": "Description détaillée",
+      "description": "Description detaillee",
       "why": "Pourquoi c'est important",
-      "how": "Comment faire concrètement au Maroc",
+      "how": "Comment faire concretement au Maroc",
       "timeline": "Dans les 24h / Cette semaine / Ce mois"
     }
   ],
@@ -180,23 +151,23 @@ FORMAT DE RÉPONSE: JSON avec la structure suivante:
   ]
 }"""
 
-PHISHING_SIMULATOR_SYSTEM_PROMPT = """Tu es un expert en ingénierie sociale et en détection de phishing. Tu génères des scénarios de phishing RÉALISTES mais ÉDUCATIFS basés sur les données exposées d'un citoyen marocain.
+PHISHING_SIMULATOR_SYSTEM_PROMPT = """Tu es un expert en ingenierie sociale et en detection de phishing. Tu generes des scenarios de phishing REALISTES mais EDUCATIFS bases sur les donnees exposees d'un citoyen marocain.
 
-CONTEXTE: Après les fuites CNSS/OFPPT, les criminels utilisent les données exposées pour cibler les victimes avec des messages personnalisés. Tu dois générer des exemples de ce type d'attaque pour ÉDUQUER l'utilisateur.
+CONTEXTE: Apres les fuites CNSS/OFPPT, les criminels utilisent les donnees exposees pour cibler les victimes avec des messages personnalises. Tu dois generer des exemples de ce type d'attaque pour EDUQUER l'utilisateur.
 
-TYPES DE SCÉNARIOS À GÉNÉRER:
-1. SMS frauduleux (smishing) - utilisant le nom réel, la banque, l'employeur
+TYPES DE SCENARIOS A GENERER:
+1. SMS frauduleux (smishing) - utilisant le nom reel, la banque, l'employeur
 2. Email de phishing - imitant la CNSS, l'OFPPT, ou une banque marocaine
-3. Appel téléphonique (vishing) - script d'un faux agent bancaire
+3. Appel telephonique (vishing) - script d'un faux agent bancaire
 4. Message WhatsApp - fausse notification officielle
 
-POUR CHAQUE SCÉNARIO:
-- Génère le message tel qu'il apparaîtrait (réaliste et crédible)
-- Inclus les RED FLAGS (signaux d'alerte) numérotés
-- Explique la technique utilisée par le fraudeur
-- Donne le comportement correct à adopter
+POUR CHAQUE SCENARIO:
+- Genere le message tel qu'il apparaitrait (realiste et credible)
+- Inclus les RED FLAGS (signaux d'alerte) numerotes
+- Explique la technique utilisee par le fraudeur
+- Donne le comportement correct a adopter
 
-IMPORTANT: Les scénarios doivent être contextualisés au Maroc (banques marocaines, institutions marocaines, numéros marocains, darija parfois dans les SMS).
+IMPORTANT: Les scenarios doivent etre contextualises au Maroc (banques marocaines, institutions marocaines, numeros marocains, darija parfois dans les SMS).
 
 FORMAT JSON:
 {
@@ -204,39 +175,30 @@ FORMAT JSON:
     {
       "type": "sms|email|call|whatsapp",
       "type_label": "SMS frauduleux",
-      "sender": "Expéditeur affiché",
+      "sender": "Expediteur affiche",
       "subject": "Objet (si email)",
       "content": "Le contenu du message frauduleux",
       "red_flags": [
         {"flag": "Description du signal d'alerte", "explanation": "Pourquoi c'est suspect"}
       ],
-      "technique": "Nom de la technique (ex: urgence artificielle, usurpation d'identité)",
-      "correct_action": "Ce qu'il faut faire face à ce message"
+      "technique": "Nom de la technique (ex: urgence artificielle, usurpation d'identite)",
+      "correct_action": "Ce qu'il faut faire face a ce message"
     }
   ],
-  "general_tips": ["Conseil général 1", "Conseil général 2"]
+  "general_tips": ["Conseil general 1", "Conseil general 2"]
 }"""
 
-
-# ============================================================
-# Routes — Pages
-# ============================================================
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# ============================================================
-# Routes — API
-# ============================================================
-
 @app.route("/api/scan", methods=["POST"])
 def scan_breach():
-    """Module 1: Check if a CIN or email appears in breach data."""
     data = request.get_json()
     query = data.get("query", "").strip()
-    query_type = data.get("type", "cin")  # "cin" or "email"
+    query_type = data.get("type", "cin")
 
     if not query:
         return jsonify({"error": "Veuillez fournir un identifiant"}), 400
@@ -259,9 +221,9 @@ def scan_breach():
     if not records:
         return jsonify({
             "found": False,
-            "message_fr": "Aucune exposition détectée pour cet identifiant dans nos bases.",
+            "message_fr": "Aucune exposition detectee pour cet identifiant dans nos bases.",
             "message_ar": "لم يتم اكتشاف أي تعرض لهذا المعرف في قواعد بياناتنا.",
-            "note_fr": "Cela ne garantit pas que vos données n'ont pas été compromises. Notre base couvre les fuites CNSS et OFPPT connues.",
+            "note_fr": "Cela ne garantit pas que vos donnees n'ont pas ete compromises. Notre base couvre les fuites CNSS et OFPPT connues.",
             "note_ar": "هذا لا يضمن أن بياناتك لم تتعرض للاختراق. قاعدتنا تغطي التسريبات المعروفة للصندوق الوطني للضمان الاجتماعي ومكتب التكوين المهني."
         })
 
@@ -271,25 +233,23 @@ def scan_breach():
 
 @app.route("/api/protection-plan", methods=["POST"])
 def generate_protection_plan():
-    """Module 2: Generate AI-powered personalized protection plan."""
     if not OPENAI_API_KEY:
-        return jsonify({"error": "Clé API OpenAI non configurée"}), 500
+        return jsonify({"error": "Cle API OpenAI non configuree"}), 500
 
     data = request.get_json()
     risk_profile = data.get("risk_profile", {})
     language = data.get("language", "fr")
 
-    # Build the user prompt with the risk profile
     user_prompt = f"""Profil de risque du citoyen:
 - Score de risque: {risk_profile.get('risk_score', 'N/A')}/100
 - Niveau: {risk_profile.get('risk', {}).get('level', 'N/A')}
 - Sources des fuites: {', '.join(b.get('source', '') for b in risk_profile.get('breaches', []))}
-- Catégories de données exposées: {', '.join(risk_profile.get('all_exposed_categories', []))}
+- Categories de donnees exposees: {', '.join(risk_profile.get('all_exposed_categories', []))}
 - Nombre de fuites: {risk_profile.get('total_breaches', 0)}
 
-{"Réponds en arabe." if language == "ar" else "Réponds en français."}
+{"Reponds en arabe." if language == "ar" else "Reponds en francais."}
 
-Génère un plan de protection personnalisé pour ce citoyen."""
+Genere un plan de protection personnalise pour ce citoyen."""
 
     try:
         client = get_openai_client()
@@ -313,15 +273,13 @@ Génère un plan de protection personnalisé pour ce citoyen."""
 
 @app.route("/api/phishing-simulator", methods=["POST"])
 def generate_phishing_scenarios():
-    """Module 3: Generate personalized phishing scenarios for education."""
     if not OPENAI_API_KEY:
-        return jsonify({"error": "Clé API OpenAI non configurée"}), 500
+        return jsonify({"error": "Cle API OpenAI non configuree"}), 500
 
     data = request.get_json()
     risk_profile = data.get("risk_profile", {})
     language = data.get("language", "fr")
 
-    # Extract personal context for realistic scenarios
     breaches = risk_profile.get("breaches", [])
     exposed_cats = risk_profile.get("all_exposed_categories", [])
 
@@ -332,16 +290,16 @@ def generate_phishing_scenarios():
         if breach.get("source") == "CNSS":
             context_parts.append("Victime de la fuite CNSS")
         if breach.get("source") == "OFPPT":
-            context_parts.append(f"Étudiant OFPPT, filière: {breach.get('filiere', 'N/A')}")
+            context_parts.append(f"Etudiant OFPPT, filiere: {breach.get('filiere', 'N/A')}")
 
     user_prompt = f"""Contexte de la victime:
-- Données exposées: {', '.join(exposed_cats)}
+- Donnees exposees: {', '.join(exposed_cats)}
 - {chr(10).join(context_parts)}
 - Score de risque: {risk_profile.get('risk_score', 'N/A')}/100
 
-{"Réponds en arabe." if language == "ar" else "Réponds en français."}
+{"Reponds en arabe." if language == "ar" else "Reponds en francais."}
 
-Génère 3 scénarios de phishing réalistes et éducatifs ciblant cette personne, basés sur les données qui ont fuité. Chaque scénario doit utiliser les informations spécifiques exposées pour montrer comment un fraudeur les exploiterait."""
+Genere 3 scenarios de phishing realistes et educatifs ciblant cette personne, bases sur les donnees qui ont fuite. Chaque scenario doit utiliser les informations specifiques exposees pour montrer comment un fraudeur les exploiterait."""
 
     try:
         client = get_openai_client()
@@ -365,7 +323,6 @@ Génère 3 scénarios de phishing réalistes et éducatifs ciblant cette personn
 
 @app.route("/api/stats", methods=["GET"])
 def get_stats():
-    """Get database statistics for the dashboard."""
     db = get_db()
     stats = {
         "total_records": db.execute("SELECT COUNT(*) FROM breach_records").fetchone()[0],
@@ -381,7 +338,6 @@ def get_stats():
 
 @app.route("/api/demo-cin", methods=["GET"])
 def get_demo_cin():
-    """Get a random CIN from the database for demo purposes."""
     db = get_db()
     record = db.execute(
         "SELECT cin, full_name, breach_source FROM breach_records WHERE risk_score >= 60 ORDER BY RANDOM() LIMIT 1"
@@ -391,10 +347,6 @@ def get_demo_cin():
         return jsonify({"cin": record["cin"], "name": record["full_name"], "source": record["breach_source"]})
     return jsonify({"error": "No records found"}), 404
 
-
-# ============================================================
-# Run
-# ============================================================
 
 if __name__ == "__main__":
     if not OPENAI_API_KEY:
