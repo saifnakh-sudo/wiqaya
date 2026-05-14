@@ -22,23 +22,19 @@ WIQAYA is an AI-powered post-breach cybersecurity tool designed for Moroccan cit
 ### Steps
 
 ```bash
-# 1. Extract the project
-unzip wiqaya-project.zip
-cd wiqaya
-
-# 2. Install dependencies
+# 1. Install dependencies
 pip install -r requirements.txt
 
-# 3. Set the OpenAI API key
+# 2. Set the OpenAI API key
 # Windows PowerShell:
 $env:OPENAI_API_KEY="sk-your-key-here"
 # Mac/Linux:
 export OPENAI_API_KEY="sk-your-key-here"
 
-# 4. (Optional) Regenerate the synthetic database
+# 3. (Optional) Regenerate the synthetic database
 python seed_database.py
 
-# 5. Run the application
+# 4. Run the application
 python app.py
 ```
 
