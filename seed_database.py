@@ -1,17 +1,9 @@
-"""
-WIQAYA - Synthetic Breach Database Generator
-Generates realistic (but fake) breach records modeled on CNSS/OFPPT data structures.
-All data is synthetic - no real personal information is used.
-"""
-
 import sqlite3
 import random
 import hashlib
 import os
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "wiqaya.db")
-
-# --- Moroccan-realistic synthetic data pools ---
 
 FIRST_NAMES_M = [
     "Mohammed", "Ahmed", "Youssef", "Amine", "Omar", "Hassan", "Rachid",
@@ -39,10 +31,10 @@ LAST_NAMES = [
 ]
 
 CITIES = [
-    "Casablanca", "Rabat", "Marrakech", "Fès", "Tanger", "Agadir",
-    "Meknès", "Oujda", "Kénitra", "Tétouan", "Safi", "El Jadida",
+    "Casablanca", "Rabat", "Marrakech", "Fes", "Tanger", "Agadir",
+    "Meknes", "Oujda", "Kenitra", "Tetouan", "Safi", "El Jadida",
     "Nador", "Beni Mellal", "Mohammedia", "Khouribga", "Settat",
-    "Berrechid", "Salé", "Temara", "Larache", "Khémisset"
+    "Berrechid", "Sale", "Temara", "Larache", "Khemisset"
 ]
 
 EMPLOYERS = [
@@ -50,41 +42,40 @@ EMPLOYERS = [
     "Attijariwafa Bank", "BMCE Bank", "Banque Populaire", "Royal Air Maroc",
     "Managem Group", "Lydec", "ONEE", "Marsa Maroc", "LafargeHolcim Maroc",
     "Renault Maroc", "Groupe Addoha", "Cosumar", "Centrale Danone",
-    "Inwi", "Orange Maroc", "Société Générale Maroc", "CDG",
+    "Inwi", "Orange Maroc", "Societe Generale Maroc", "CDG",
     "TMSA", "Tanger Med", "OFPPT", "CHU Ibn Sina", "CNSS",
-    "Ministère de la Santé", "Ministère de l'Éducation", "ANAPEC",
+    "Ministere de la Sante", "Ministere de l'Education", "ANAPEC",
     "Auto Hall", "Label'Vie", "Marjane Holding", "Kitea",
-    "Stroc Industrie", "Ménara Holding", "Palmeraie Holding",
+    "Stroc Industrie", "Menara Holding", "Palmeraie Holding",
     "Akwa Group", "Ynna Holding", "Saham Group", "Wafa Assurance"
 ]
 
 BANKS = [
     "Attijariwafa Bank", "BMCE Bank of Africa", "Banque Populaire",
-    "Société Générale Maroc", "CIH Bank", "Crédit du Maroc",
+    "Societe Generale Maroc", "CIH Bank", "Credit du Maroc",
     "BMCI", "CDM", "Al Barid Bank", "CFG Bank", "Bank Assafa",
-    "Crédit Agricole du Maroc"
+    "Credit Agricole du Maroc"
 ]
 
 OFPPT_FILIERES = [
-    "Développement Digital", "Infrastructure Digitale",
-    "Technicien Spécialisé en Électricité",
+    "Developpement Digital", "Infrastructure Digitale",
+    "Technicien Specialise en Electricite",
     "Technicien en Maintenance Industrielle",
     "Gestion des Entreprises", "Commerce",
     "Technicien Comptable d'Entreprises",
-    "Cuisine", "Hôtellerie", "Tourisme",
-    "Mécanique Auto", "Électromécanique",
-    "Dessin de Bâtiment", "Construction Métallique",
-    "Secrétariat de Direction", "Logistique"
+    "Cuisine", "Hotellerie", "Tourisme",
+    "Mecanique Auto", "Electromecanique",
+    "Dessin de Batiment", "Construction Metallique",
+    "Secretariat de Direction", "Logistique"
 ]
 
 OFPPT_CENTERS = [
-    "ISTA Hay Riad Rabat", "ISTA NTIC Casablanca", "ISTA Kénitra",
-    "ISTA Tanger", "ISTA Fès", "ISTA Marrakech", "ISTA Agadir",
-    "ISTA Meknès", "ISTA Oujda", "ISTA Tétouan", "ISTA Safi",
+    "ISTA Hay Riad Rabat", "ISTA NTIC Casablanca", "ISTA Kenitra",
+    "ISTA Tanger", "ISTA Fes", "ISTA Marrakech", "ISTA Agadir",
+    "ISTA Meknes", "ISTA Oujda", "ISTA Tetouan", "ISTA Safi",
     "CFP Casablanca", "CFP Rabat", "CFP Tanger", "CFP Marrakech"
 ]
 
-# Breach sources
 BREACH_CNSS = "CNSS"
 BREACH_OFPPT = "OFPPT"
 
@@ -101,7 +92,6 @@ DATA_CATEGORIES = {
 
 
 def generate_cin():
-    """Generate a realistic-looking Moroccan CIN (fake)."""
     letters = random.choice(["A", "B", "BE", "BH", "BJ", "BK", "C", "D",
                               "DA", "E", "EE", "F", "G", "H", "I", "J",
                               "K", "L", "M", "N", "P", "Q", "R", "S", "T",
@@ -111,14 +101,12 @@ def generate_cin():
 
 
 def generate_phone():
-    """Generate a realistic Moroccan phone number (fake)."""
     prefixes = ["0661", "0662", "0668", "0670", "0671", "0672",
                 "0700", "0708", "0610", "0611", "0612", "0613"]
     return f"{random.choice(prefixes)}{random.randint(100000, 999999)}"
 
 
 def generate_email(first, last):
-    """Generate a plausible email."""
     domains = ["gmail.com", "yahoo.fr", "hotmail.com", "outlook.com",
                "live.fr", "hotmail.fr", "yahoo.com"]
     sep = random.choice([".", "_", ""])
@@ -129,19 +117,17 @@ def generate_email(first, last):
 
 
 def generate_bank_account():
-    """Generate a fake Moroccan RIB-style bank account number."""
     return f"{random.randint(100, 999)}{random.randint(100, 999)}{random.randint(1000000000, 9999999999)}{random.randint(10, 99)}"
 
 
 def generate_salary():
-    """Generate realistic Moroccan salary range (monthly, MAD)."""
     brackets = [
-        (2800, 4000, 0.25),    # SMIG range
-        (4000, 7000, 0.30),    # Lower middle
-        (7000, 15000, 0.25),   # Middle
-        (15000, 30000, 0.12),  # Upper middle
-        (30000, 80000, 0.06),  # Senior
-        (80000, 200000, 0.02), # Executive
+        (2800, 4000, 0.25),
+        (4000, 7000, 0.30),
+        (7000, 15000, 0.25),
+        (15000, 30000, 0.12),
+        (30000, 80000, 0.06),
+        (80000, 200000, 0.02),
     ]
     r = random.random()
     cumulative = 0
@@ -153,19 +139,16 @@ def generate_salary():
 
 
 def hash_identifier(value):
-    """Create a searchable hash of an identifier (for lookup without storing plaintext in search index)."""
     return hashlib.sha256(value.encode()).hexdigest()[:16]
 
 
 def create_database():
-    """Create the SQLite database and tables."""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
     c.execute("DROP TABLE IF EXISTS breach_records")
     c.execute("DROP TABLE IF EXISTS breach_lookup")
 
-    # Main records table
     c.execute("""
         CREATE TABLE breach_records (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -175,25 +158,21 @@ def create_database():
             email TEXT,
             phone TEXT,
             city TEXT,
-            -- CNSS-specific
             employer TEXT,
             salary REAL,
             bank_account TEXT,
             bank_name TEXT,
             birth_date TEXT,
-            -- OFPPT-specific
             filiere TEXT,
             center TEXT,
             diploma_level TEXT,
             enrollment_year INTEGER,
-            -- Metadata
             exposed_categories TEXT,
             risk_score INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
-    # Lookup table for fast search by CIN/email hash
     c.execute("""
         CREATE TABLE breach_lookup (
             lookup_hash TEXT NOT NULL,
@@ -212,7 +191,6 @@ def create_database():
 
 
 def calculate_risk_score(categories):
-    """Calculate risk score 0-100 based on exposed data categories."""
     weights = {
         "cin": 20, "full_name": 5, "email": 8, "phone": 10,
         "employer": 5, "salary": 15, "bank_account": 25,
@@ -224,12 +202,11 @@ def calculate_risk_score(categories):
 
 
 def seed_cnss_records(conn, count=3000):
-    """Generate synthetic CNSS breach records."""
     c = conn.cursor()
     records = []
 
     for _ in range(count):
-        is_female = random.random() < 0.35  # Workforce gender ratio
+        is_female = random.random() < 0.35
         first = random.choice(FIRST_NAMES_F if is_female else FIRST_NAMES_M)
         last = random.choice(LAST_NAMES)
         full_name = f"{first} {last}"
@@ -244,11 +221,9 @@ def seed_cnss_records(conn, count=3000):
         birth_year = random.randint(1960, 2000)
         birth_date = f"{random.randint(1,28):02d}/{random.randint(1,12):02d}/{birth_year}"
 
-        # Not all categories exposed for every record (realistic)
         all_cats = DATA_CATEGORIES[BREACH_CNSS].copy()
         num_exposed = random.randint(5, len(all_cats))
         exposed = random.sample(all_cats, num_exposed)
-        # CIN and name always exposed
         if "cin" not in exposed:
             exposed.append("cin")
         if "full_name" not in exposed:
@@ -279,7 +254,6 @@ def seed_cnss_records(conn, count=3000):
 
 
 def seed_ofppt_records(conn, count=2000):
-    """Generate synthetic OFPPT breach records."""
     c = conn.cursor()
     records = []
 
@@ -294,7 +268,7 @@ def seed_ofppt_records(conn, count=2000):
         city = random.choice(CITIES)
         filiere = random.choice(OFPPT_FILIERES)
         center = random.choice(OFPPT_CENTERS)
-        diploma_level = random.choice(["Technicien", "Technicien Spécialisé", "Qualification", "Spécialisation"])
+        diploma_level = random.choice(["Technicien", "Technicien Specialise", "Qualification", "Specialisation"])
         enrollment_year = random.randint(2018, 2026)
 
         all_cats = DATA_CATEGORIES[BREACH_OFPPT].copy()
@@ -329,7 +303,6 @@ def seed_ofppt_records(conn, count=2000):
 
 
 def build_lookup_index(conn):
-    """Build the hash lookup index for fast searching."""
     c = conn.cursor()
     c.execute("SELECT id, cin, email FROM breach_records")
     rows = c.fetchall()
@@ -354,7 +327,6 @@ def main():
     build_lookup_index(conn)
     print()
 
-    # Stats
     c = conn.cursor()
     c.execute("SELECT COUNT(*) FROM breach_records")
     total = c.fetchone()[0]
@@ -365,7 +337,7 @@ def main():
 
     print(f"Database ready: {total} records")
     print(f"   Average risk score: {avg_risk:.1f}/100")
-    print(f"   High risk (≥70): {high_risk} records")
+    print(f"   High risk (>=70): {high_risk} records")
     print(f"   File: {DB_PATH}")
 
     conn.close()
