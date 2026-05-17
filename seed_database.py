@@ -1,3 +1,7 @@
+# Copyright (c) 2026 Ahmed Saifeddine Nakhli / LUMIVYN LTD
+# All Rights Reserved. Proprietary and Confidential.
+# Unauthorized use, copying, or distribution is strictly prohibited.
+
 import sqlite3
 import random
 import hashlib
