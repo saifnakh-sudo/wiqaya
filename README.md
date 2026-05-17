@@ -2,6 +2,7 @@
 > © 2026 Ahmed Saifeddine Nakhli / LUMIVYN LTD · All Rights Reserved  
 > Proprietary software. Viewing permitted for portfolio evaluation only.  
 > Unauthorized use, cloning, or reproduction is strictly prohibited.
+
 > Youth Nexus Cyber AI Challenge -- 1ere Edition
 > ENSA Kenitra x CMRPI -- Mai 2026
 
